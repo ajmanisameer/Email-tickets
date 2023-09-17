@@ -36,11 +36,13 @@ module.exports = ({ strapi }) => ({
     const newTicket = await strapi.entityService.create(
       "plugin::ticket.ticket",
       {
-        Email: data.Email,
-        Subject: data.Subject,
-        Message: data.Message,
-        Status: "replied",
-        ThreadID: threadID, // Use the same ThreadID as the original email.
+        to: 'support@example.com',
+        from: data.Email,
+        subject: data.Subject,
+        message: data.Message,
+        status: "replied",
+        threadID: threadID,
+        date: Date.now() // Use the same ThreadID as the original email.
       }
     );
 
@@ -112,19 +114,18 @@ module.exports = ({ strapi }) => ({
     try {
       // Simulate receiving an email
       const emailData = {
+        id: '53267',
         from: 'sender@example.com',
         subject: 'Received Email Subject',
         message: 'Received Email Message',
+        threadID: '4',
+        status: 'resolved'
       };
-
       console.log('Simulated email received:', emailData);
-
       ctx.send({ message: 'Email received and processed' });
     } catch (err) {
       ctx.throw(500, 'Error receiving email', { error: err });
     }
   },
-
-
 
 });
